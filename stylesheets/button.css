@@ -1,0 +1,158 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+
+/* -------------------------------------------- BUTTONS -------------*/
+
+body .btn {
+  display: inline-block;
+  padding: 6px 14px 6px;
+  margin-bottom: 0;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #FFFFFF;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: #0077C8;
+  background-image: -webkit-linear-gradient(rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.05) 95%);
+  background-image: -moz-linear-gradient(rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.05) 95%);
+  background-image: -linear-gradient(rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.05) 95%);
+  background-image: -ms-linear-gradient(rgba(255, 255, 255, 0.1) 0%, rgba(0, 0, 0, 0.05) 95%);
+  background-repeat: repeat-x;
+  border: 0;
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+  -webkit-box-shadow: inset 0 -2px 0 rgba(0,0,0,.2);
+     -moz-box-shadow: inset 0 -2px 0 rgba(0,0,0,.2);
+          box-shadow: inset 0 -2px 0 rgba(0,0,0,.2);
+  -webkit-transition: 0.1s;
+     -moz-transition: 0.1s;
+  transition: 0.1s;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+body .btn:hover {
+  background-color: #0098ff;
+  -webkit-box-shadow: inset 0 -4px 0 rgba(0,0,0,.2);
+     -moz-box-shadow: inset 0 -4px 0 rgba(0,0,0,.2);
+          box-shadow: inset 0 -4px 0 rgba(0,0,0,.2);
+  margin-top: -2px;
+  padding: 6px 14px 8px;
+}
+
+body .btn:active {
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  margin-top: 2px;
+  padding: 6px 14px 4px;
+}
+
+body .btn-facebook { color:#000000; background-color: #3b5998; }
+body .btn-facebook:hover { background-color:#365899; }
+
+body .btn-red { color:white; background-color: red }
+body .btn-red:hover { background-color:#f44336; }
+
+body .btn-green { color:white; background-color: green }
+body .btn-green:hover { background-color:#4CAF50; }
+
+body .btn-gray { color:#000000; background-color: #F5F5F5; }
+body .btn-gray:hover { background-color:#DDDDDD; }
+body .btn-dkblue { background-color: #054375; }
+body .btn-dkblue:hover { background-color:#0066b8; }
+body .btn-ltblue { background-color: #00a4d8; }
+body .btn-ltblue:hover { background-color:#01c2ff; }
+body .btn-black { background-color: #222222; }
+body .btn-black:hover { background-color:#444444; }
+
+body .btn-large {
+  padding: 8px 28px;
+  font-size: 20px;
+  line-height: 30px;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  -webkit-box-shadow: inset 0 -3px 0 rgba(0,0,0,.2);
+     -moz-box-shadow: inset 0 -3px 0 rgba(0,0,0,.2);
+          box-shadow: inset 0 -3px 0 rgba(0,0,0,.2);
+}
+
+body .btn-large:hover {
+  -webkit-box-shadow: inset 0 -6px 0 rgba(0,0,0,.2);
+     -moz-box-shadow: inset 0 -6px 0 rgba(0,0,0,.2);
+          box-shadow: inset 0 -6px 0 rgba(0,0,0,.2);
+  margin-top: -4px;
+  padding: 8px 28px 12px;
+}
+
+body .btn-large:active {
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  margin-top: 3px;
+  padding: 8px 28px 5px;
+}
+
+body .btn-small {
+  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+     -moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  padding: 0 8px;
+  margin-top: -5px;
+  margin-bottom:-4px;
+}
+
+body .btn-small:hover {
+  -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+     -moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  padding: 0 8px 2px;
+  margin-top: -7px;
+}
+
+body .btn-small:active {
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+padding: 0 8px 0px;
+margin-top: -5px;
+}
+
+body .btn-block {
+  padding: 8px 28px;
+  font-size: 20px;
+  line-height: 30px;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  -webkit-box-shadow: inset 0 -3px 0 rgba(0,0,0,.2);
+     -moz-box-shadow: inset 0 -3px 0 rgba(0,0,0,.2);
+          box-shadow: inset 0 -3px 0 rgba(0,0,0,.2);
+  width:100%;
+  max-width:960px
+
+}
+body .btn-block:hover {
+  -webkit-box-shadow: inset 0 -6px 0 rgba(0,0,0,.2);
+     -moz-box-shadow: inset 0 -6px 0 rgba(0,0,0,.2);
+          box-shadow: inset 0 -6px 0 rgba(0,0,0,.2);
+  margin-top: -4px;
+  padding: 8px 28px 12px;
+}
+
+body .btn-block:active {
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+  margin-top: 3px;
+  padding: 8px 28px 5px;
+}

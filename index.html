@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+  <head>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
+    <link rel="manifest" href="favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+    <script type="text/javascript">
+      if (window.location.host == "jasongornall.github.io") {
+        document.write("<base href='"+ 'https://jasongornall.github.io/wedding/' + "' >");
+      } else {
+        document.write("<base href='"+ window.location.protocol +'//' + window.location.host + "' >");
+      }
+    </script>
+    <script>
+      (function(){
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect != location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
+    <link type="text/css" rel="stylesheet" href="stylesheets/main.css">
+    <link type="text/css" rel="stylesheet" href="stylesheets/fireflies.css">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,minimal-ui">
+
+    <meta property="og:url"           content="https://seenergornallwedding.com/" />
+    <meta property="og:type"          content="website" />
+    <meta property="og:title"         content="Jason and Chelsea Are getting married!" />
+    <meta property="og:image"         content="https://seenergornallwedding.com/pics/43606007c89472238d950d49d0fa05096daef57f.jpg" />
+    <meta property="og:description"   content="Welcome to our wedding website!" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" ccontent="https://seenergornallwedding.com/" />
+    <meta name="twitter:title" content="Jason and Chelsea Are getting married!" />
+    <meta name="twitter:image" content="https://seenergornallwedding.com/pics/43606007c89472238d950d49d0fa05096daef57f.jpg" />
+    <meta name="twitter:description" content="Welcome to our wedding website!" />
+
+    <link href='https://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="libs/teacup.js"></script>
+    <script src="libs/teacup-config.js"></script>
+    <script src="libs/async.min.js"></script>
+    <script src="libs/url.min.js"></script>
+    <script src="libs/jquery.history.js"></script>
+    <script src="libs/lettering.min.js"></script>
+  </head>
+
+  <body>
+    <img class = 'mask' src = "../images/background-new.png"> </div>
+    <div id="container">
+      <canvas id="pixie"></canvas>
+    </div>
+    <img class = 'mask' src = "../images/front.png"> </div>
+
+    <div id="body">
+
+      <div class = "main-header">
+        Jason and Chelsea are getting Married
+      </div>
+
+      <div id="navigation">
+        <a href= "/">Home</a>
+        <a href= "/story">Our Story</a>
+        <a href= "/rsvp">RSVP</a>
+        <a href= "/registry">Registry</a>
+        <a href= "/wedding-location">Wedding Location</a>
+        <a href= "/accomodations">Accomodations</a>
+        <a href= "/important-information">Important Information</a>
+      </div>
+
+
+      <div id = "routes">
+        <div data-route = "/important-information">
+          <div class = "question">
+            Are there vegetarian/vegan options available?
+          </div>
+          <div class = "answer">
+            Yes, please list any dietary restrictions when you RSVP. This includes vegetarian/vegan, food allergies, celiac, etc. Our wedding cake is gluten free!
+          </div>
+          <div class = "question">
+            Is there parking at the venue?
+          </div>
+          <div class = "answer">
+            There is parking spots on the street at the reception at Cuvier Club Ballroom. Street parking on Sunday tends to be plentiful, free, and all parking signs are not eligible on Sunday so there are no parking restrictions or time limits.
+          </div>
+
+          <div class = "question">
+            Is there a shuttle?
+          </div>
+          <div class = "answer">
+            There is a small shuttle that will run from the Cuvier Club ballroom reception area to the ceremony site at Cuvier Park down the hill starting at 3:45pm. The ceremony will begin promptly at 4:30pm. We do encourage those capable to walk from the parking around Cuvier Club Ballroom, or from your nearby hotel, to the ceremony site at Cuvier Park Wedding Bowl. The walk is less than 5 minutes and you can follow the chalk hearts on the sidewalk. The shuttle will also be available to take people from the ceremony site back to the reception, again for those who choose not to walk.
+          </div>
+
+          <div class = "question">
+            Are there any guest limitations?
+          </div>
+          <div class = "answer">
+            Sorry but there are no children permitted at this wedding venue. There is sadly a capacity limit for the ceremony site restricted by the state of California. As such, we do have to limit our invites, but wish to share our special day with as many of our friends and loved ones as possible. Please only R.S.V.P. for your significant other or a guest if it is addressed as such on your invitation. If there are any issues or you would like to address your “guest” status, please contact us at
+            <a href="seenergornallwedding@gmail.com"> seenergornallwedding@gmail.com. </a>
+          </div>
+
+        </div>
+        <div data-route = "/accomodations">
+          <h1> Blocked Hotel Choices </h1>
+          <p>
+          While there are many hotel options you may search for in La Jolla and San Diego that may suit your needs differently and offer different prices, these 2 hotels are walking distance from our venue and offer the most convenience. The area of La Jolla is extremely pedestrian friendly with parks, beaches, restaurants, shops, etc. all in walking distance, and supports the decision to not rent a car. You can easily take an airport shuttle to/from the airport, or use Uber, Lyft, or a taxi if you need to get anywhere outside of La Jolla, if you're not planning to spend your day by the beach!
+          </p>
+          <hr>
+          <h1> Inn by the Sea, La Jolla  (Option 1)</h1>
+          <p>
+            We Recommend
+            <a href="http://www.innbytheseaatlajolla.com/">
+              Inn By The Sea
+            </a>
+            We have blocked off several rooms so be sure to mention Seener Wedding party when you book
+          </p>
+          <p>
+            There are many other options in the area. Please feel free to pick what works best for you!
+          </p>
+          <ul>
+            <li> Call the front desk to book a room at 1-800-526-4545 or 1-858-459-4461. Say that <b>you are with the Seener-Gornall</b> wedding party to get the blocked room prices.</li>
+            <li> This hotel is 2 blocks walking distance from the wedding! </li>
+            <li> Includes Free Parking, Free Wi-Fi, Free Gym/Pool </li>
+            <li> Blocked Room Prices are as follows: </li>
+            <ul>
+              <li> Weekend Prices (Friday & Saturday)- Standard Room is $159.00 / night and Ocean View Room is $219 / night. </li>
+              <li> Weekday Prices (Sunday-Thursday)- Standard Room is $143 / night and Ocean View Room is $179 / night. </li>
+            </ul>
+          </ul>
+          <img src = "https://images.trvl-media.com/hotels/1000000/10000/1800/1705/38762ce4_z.jpg">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4242.911479598752!2d-117.27787907678062!3d32.844534672685235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80dc03fb3ca8fa9b%3A0x711487906f7fbee8!2sInn+by+the+Sea+at+La+Jolla!5e0!3m2!1sen!2sus!4v1493597410851" frameborder=0 vspace=0 hspace=0 marginwidth=0 marginheight=0 allowfullscreen></iframe>
+          <hr>
+          <h1> La Jolla Cove & Suites (Option 2) </h1>
+          <ul>
+            <li>Click on the following  <a href = "https://gc.synxis.com/rez.aspx?Hotel=13905&amp%3bChain=5335&amp%3bpromo=GROUP20"> link </a> to view room options </li>
+            <li>Make sure to put in the code <b> GROUP20 </b> in the Special Codes tab under “Corporate / Promotion Code.” You can also call the hotel at <b>858-459-2621</b> and request a room with our wedding party name and the group code. </li>
+            <li>Room prices vary depending on when the booking is made and can range from $163.20/night for a standard Non-view room, $212/night for an Ocean view standard room, or $235+/night for multiple beds/suites for large families and traveling groups.</li>
+            <li>This hotel is about half a mile from the wedding, or a 15 minute walk (with a medium incline hill). Otherwise there is parking around the wedding venue and all street parking is free with no sign limitations on Sundays.  </li>
+            <li>This hotel is the “hip” spot to be, with a rooftop bar and pool overlooking the ocean, fire pits, free Wi-Fi, free gym, and free continental breakfast.</li>
+            <li><b>Parking is $20/night</b> (and I sadly cannot get it waived) is the only downside, but if you are not planning to rent a car, you can easily shuttle from the airport or take Uber/Lyft and not have to worry about parking. </li>
+          </ul>
+          <div>
+          <img src = "images/La_Jolla_0000_K28A7818.jpg">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3351.8024593023415!2d-117.27498773434436!3d32.85048163094991!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x4f79ae423227b0cb!2sLa+Jolla+Cove!5e0!3m2!1sen!2sus!4v1495413218357" frameborder=0 vspace=0 hspace=0 marginwidth=0 marginheight=0 allowfullscreen></iframe>
+          </div>
+        </div>
+        <div data-route = "/rsvp">
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfnzjaUn-OTKvu9CGiL_WKIPJH49a7ZumEQlbh101EysEaxRA/viewform?embedded=true"  frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+        </div>
+
+        <div data-route = "/">
+          <h1 class = "rewrite"> The greatest thing you'll ever learn is just to love and be loved in return.</h1>
+        </div>
+        <div data-route = "/registry">
+          <h1> Our Registries </h1>
+          <div class = "row">
+            <a class="cell zola-registry-embed" href="https://www.zola.com/registry/seenergornall">
+              <img src = "images/zola-logo-blue.jpg">
+            </a>
+            <div class = "cell">
+              If you would rather contribute to our Honeymoon Fund online, Zola hosts our Honey-Fund. Zola is also a great place to send gifts with free shipping. They also price match.
+            </div>
+          </div>
+          <div class = "row">
+            <a class="cell" href = "https://www.macys.com/wgl/registry/guest/6783393">
+              <img src = "images/macys-logo.jpg">
+            </a>
+            <div class = "cell">
+              Macy's has the most options for our gift registry, we suggest waiting for a sale and use Macy's coupons!
+            </div>
+          </div>
+
+          <div class = "row">
+            <a class="cell" href = "https://www.target.com/gift-registry/giftgiver?registryId=30e432dfe72d4bd6b3bf2dc929774a02#1">
+              <img src = "images/target-logo.jpg">
+            </a>
+            <div class = "cell">
+              While this registry might not have a lot of specific gift options, this is where Chelsea buys all the basics. Chelsea loves Target and buys everything there!
+            </div>
+          </div>
+        </div>
+
+        <div data-route = "/wedding-location">
+
+            <div class = "section">
+              <h1> Ceremony </h1>
+              <p>
+                The Ceremony takes place at Cuvier Park at 4:30pm. It's a small park that overlooks the ocean. The ceremony is on grass, so we encourage safe shoe choices. Please see our Important Information section in regards to parking, walking,  and shuttle options.
+              </p>
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d10916.375074789657!2d-117.28318143214132!3d32.84443710871668!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x80dc03effcd61cf7%3A0xbd3360831e4acdcb!2sCuvier+Park!5e0!3m2!1sen!2sus!4v1493596032990"  height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+            <div class = "section">
+              <h1> Reception </h1>
+              <p>
+                The reception will take place after the ceremony a short 0.3 mile walk away at the Cuvier Club Ballroom. A shuttle is provided for those not wanting to walk. Please see our Important Information tab in regards to parking, walking, and shuttle options. The reception will include an entertaining cocktail hour and full dinner. We can't wait to celebrate with you and dance the night away!
+              </p>
+              <iframe scrolling="no" src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d1676.0268957053304!2d-117.2792683919769!3d32.843827398702665!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0x80dc03effcd61cf7%3A0xbd3360831e4acdcb!2sCuvier+Park%2C+590+Coast+Blvd+S%2C+La+Jolla%2C+CA+92037!3m2!1d32.8435225!2d-117.28002819999999!4m5!1s0x80dc03e52a93be8f%3A0x61b40b925e731938!2sCuvier+Club+Ballroom%2C+7776+Eads+Ave%2C+La+Jolla%2C+CA+92037!3m2!1d32.844198!2d-117.27668299999999!5e0!3m2!1sen!2sus!4v1493596339673"  height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+        </div>
+        <div data-route = "/story">
+            <h1>OUR STORY</h1>
+            <p>
+            <img class = "left" src="pics/10357191_10154286745155316_2568239945501712404_n.jpg">
+            Chelsea and Jason met through Chelsea's undergraduate college friend, Jason Cung (or Jason #1).  Chelsea flew up to San Francisco to visit Jason #1 and her other friends.  It just so happened that on her first trip to visit her best friend Andy, after he got a new job, Jason #1 and Chelsea met up for karaoke at The Mint.  Jason #1 said he was expecting his “twin,” Jason #2 (of course Jason Gornall), to meet them there, but he was running late.  Jason #2 showed up right after Jason #1 and Chelsea finished their cheesy duet of “A Whole New World,” which became the joke of the trip.  But Chelsea made it up to Jason #2 by singing “Nature Boy” at a piano bar called Martunies. She found out later the song was in one of Jason #2's favorite movies, Moulin Rouge.  Hearing Chelsea sing that song is the moment Jason #2 fell for her.  After that, and some flirting over who would pay for the drinks (Jason #2 won that battle, but Chelsea got him back afterward by paying for his pizza), the two became friends on Facebook as usual.  Chelsea flew back to San Diego, and Jason #2 continued his life in the Bay Area, both thinking that current relationships and distance would get in the way of destiny.
+            </p>
+
+            <p>
+            <img class = "left" src="pics/13260272_10156868989160316_4159479597074765003_n.jpg">
+            However, destiny was carving a different path than they thought.  Chelsea returned to San Francisco six months later to again visit her best friend Andy and her college bud Jason #1.  Jason #1 again invited Jason #2 out to join them for the reunion, and once again Chelsea and Jason #2 bonded as he tried to prevent her from crossing the street without a walk signal, becoming another joke between them.  Chelsea went back to San Diego with some big decisions ahead, applying to graduate programs, and Jason #2 continued his work up in San Francisco.  Finally, in early February 2014, destiny got a check mate.  Chelsea returned to San Francisco for an audition at The Conservatory and reunited with her friends, (one stop on her eight-school audition trip across the country).  Not knowing where she would end up, Chelsea wasn't considering starting a relationship, but it seemed that Jason #2 and Chelsea just clicked every time they saw each other.  This time, both didn't want to say goodbye as Chelsea joked with Jason #2, “Goodbye Forever!” and texted him a picture of her plane wing as she flew home.
+            </p>
+
+            <p>
+            <img class = "left" src="pics/12931046_10156732133730316_7897351691449056421_n.jpg">
+            However, they couldn't stop texting and talking.  The following week, Chelsea flew to Chicago for her next school audition.  It was Valentine's Day, and Chelsea's flight home from Chicago was canceled due to a blizzard, so Chelsea and Jason #2 spent 7 hours video chatting over Skype while she was stuck at the hotel.  “Well, I guess its ‘Singles Awareness Day’,” Chelsea joked with Jason #2, but he responded saying it didn't have to be ‘Singles Awareness Day.’  Instead he told Chelsea that he liked her and wanted to pursue a relationship with her, even though she wasn't sure where she might end up.  Chelsea then said that she liked him too.  However, if he seriously wanted to be with her and potentially be in a long distance relationship, he should meet her for her final audition trip in New York.  So Jason #2, committed to being with her, flew across the country and met her in New York for their first official “date” together as a couple, and Jason #2 became her Jason #1!
+            </p>
+            <p>
+              The story of destiny continues from there.  Chelsea chose to attend Boston University, and Jason knowing he wanted to be with her, moved in with her.  Now they are permanently stuck together because they adopted their cat and oh…they’re getting married of course!
+            </p>
+
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <footer>
+    <script src="javascripts/main.js"></script>
+    <script src="libs/fireflies.js"></script>
+  </footer>
+</html>
