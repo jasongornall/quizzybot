@@ -2,208 +2,36 @@ $active = gold
 $text_color = white
 
 html
-  background black
-  font-family: Sans-Serif, Arial, Helvetica;
-  &::-webkit-scrollbar
-    width 7px
-  &::-webkit-scrollbar-thumb
-    background-color $active
-  &::-webkit-scrollbar-track
-    background-color $text_color
-  .mask
-    position: fixed;
-    left: 50%;
-    transform: translate(-50%);
-    top: 0;
-    overflow: hidden;
-
-  h1
-    padding: 20px 10px;
-    text-align: left;
-    margin 0
-  p, li
-    line-height 1.4em
-  #body
-    position relative
-    z-index 100
-    text-align center
-    .main-header
-      font: 400 130px/0.8 'Cookie', Helvetica, sans-serif;
-      color: #fff;
-      text-shadow: 4px 4px 3px rgba(0,0,0,0.1);
-      text-align: center;
-      font-size 75px
-      margin-bottom 20px
-      padding-top: 27px;
-
-    #navigation
-      text-align center
-      background: rgba(0,0,128,0.55);
-      display: inline-block;
-      text-align: center;
-      padding: 10px;
-      border-radius: 13px;
-      margin-top: 130px;
-
-      > a
-        color white
-        margin 0 10px;
-        text-decoration none
-        &:hover
-          color $active
-        &.active
-          color $active
-
-    #routes
-      text-align left
-      position: relative;
-      z-index: 10;
-      color: white;
-      max-width: 800px;
-      margin: 0 auto;
-      margin-top: 60px;
-      [data-route]
-        background rgba(0,0,0,.7)
-        display none
-        .rewrite
-          font: 400 37px/1.2 'Cookie', Helvetica, sans-serif;
-          > span
-            transition all 1s
-            opacity 0
-            display: inline;
-            position relative
-            &.show
-              top: 0 !important
-              left: 0 !important
-              opacity 1 !important
-        .additions
-          color $active
-          font-size: 30px;
-          margin-top: 20px;
-          display: none;
-          padding: 10px;
-          text-align center
-
-      [data-route="/"]
-        .rewrite
-          text-align: center;
-          margin: 0;
-          max-width: 300px;
-          margin: 0 auto;
-          height: auto;
-          padding-top: 30px;
-          > span
-            min-width: 0.4em;
-      a
-        color gold
-      [data-route= "/story"]
-        padding 10px
-        p
-          display: block;
-          position: relative;
-          min-height: 250px;
-        h1
-          text-align center
-          color $active
-          font 400 48px/0.8 'Cookie', Helvetica, sans-serif
-          margin 0
-          padding 15px
-        img
-          max-width: 190px;
-          max-height 100%
-          &.left
-            padding-right 10px
-            float left
-          &.center
-            display: block;
-            margin: 20px auto;
-
-      [data-route = "/rsvp"]
-        iframe
-          width 800px
-          height 1820px
-          max-width 100%
-      [data-route = "/important-information"]
-        padding 20px
-        .question
-          color $active
-          font-size 20px
-        .answer
-          line-height 1.3em
-          color white
-          margin-bottom 30px
-      [data-route = "/accomodations"]
-        h1
-          text-align left
-        hr
-          background $active
-        p
-          padding 10px
-        b
-          color $active
-        iframe, img
-          display block
-          max-width 100%
-          padding 0
-          margin 0
-          border 0
-          vertical-align top
-        iframe
-          width 100%
-
-      [data-route = "/registry"]
-
-        img
-          float left
-          width 120px
-        .row
-          display table-row
-
-        .cell
-          display table-cell
-          vertical-align middle
-          text-align left
-          padding 10px
-          img
-            margin: 0 auto;
-            display: block;
-      [data-route = "/wedding-location"]
-        background none
-        h1
-          padding-left 0
-        .section
-          background rgba(0,0,0,.7)
-          margin-bottom 20px
-          padding 10px
-          box-sizing border-box
-
-        p
-          margin-bottom 10px
-        iframe
-          width 100%
-
-
-@media (max-width: 800px)
-  html #body
-    .main-header
-      font-size: 50px;
-      margin-bottom: 30px;
-      padding-top 25px
-    #navigation
-      margin-top 130px
-      > a
+  background white
+  font-family: Sans-Serif, Arial, Helvetica
+  #routes
+    max-width 800px
+    margin 0 auto
+    [data-route='/']
+      .question
+        border: 1px solid black;
         padding: 10px;
-        line-height: 20px;
-        margin 0
-        display: inline-block
+      .guesses
+        height 340px
+        border 1px solid green
+        martin-top 50px
+      .answer-form
+        .guess-field
+          vertical-align top
+          height: 30px;
+          width 80%
+          margin 0
+          display inline-block
+          box-sizing border-box
+        .button
+          background: green;
+          width: 20%;
+          height: 30px;
+          display: inline-block;
+          color: white;
+          text-align: center;
+          line-height: 30px;
+          cursor pointer
 
-@media (max-width: 536px)
-  html #body
-    .main-header
-      padding-top 15px
-    #navigation
-      margin-top 100px
-    #routes
-      margin-top 30px
 
 
