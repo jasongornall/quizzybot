@@ -1,10 +1,109 @@
+.google {
+  background: #dd4b39;
+  color: #fff;
+}
+.google:before {
+  content: "\f1a0";
+  font-family: 'FontAwesome';
+}
+.twitter {
+  background: #55acee;
+  color: #fff;
+}
+.twitter:before {
+  content: "\f099";
+  font-family: 'FontAwesome';
+}
+.facebook {
+  background: #3b5998;
+  color: #fff;
+}
+.facebook:before {
+  content: "\f09a";
+  font-family: 'FontAwesome';
+}
 html {
   background: #fff;
   font-family: Sans-Serif, Arial, Helvetica;
 }
+html a {
+  margin: 0 10px;
+  color: #fff;
+}
+html a.active {
+  color: #ff0;
+}
+html a.visited {
+  color: inherit;
+}
+html.logged-in #navigation .logged-in {
+  display: inline;
+}
+html.logged-out #navigation .logged-out {
+  display: inline;
+}
+html #navigation {
+  background: #008000;
+  vertical-align: top;
+  padding: 10px;
+  box-sizing: border-box;
+  color: #fff;
+}
+html #navigation .logged-in,
+html #navigation .logged-out {
+  display: none;
+}
+html #navigation > div {
+  display: inline-block;
+}
+html #navigation > .right {
+  float: right;
+}
+html #navigation > .left {
+  float: left;
+}
 html #routes {
   max-width: 800px;
   margin: 0 auto;
+}
+html #routes .router-header {
+  margin: 20px 0;
+  font-size: 25px;
+  color: #008000;
+}
+html #routes [data-route = "/login"] .logged-out {
+  text-align: center;
+}
+html #routes [data-route = "/login"] .logged-out .description {
+  opacity: 0.5;
+  color: #000;
+  text-align: left;
+}
+html #routes [data-route = "/login"] .logged-out .socials {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+html #routes [data-route = "/login"] .logged-out .socials [data-login] {
+  padding: 20px;
+  display: inline-block;
+  cursor: pointer;
+}
+html #routes [data-route = "/login"] .logged-out .socials [data-login]:hover {
+  opacity: 0.8;
+}
+html #routes [data-route = "/login"] .logged-out .socials [data-login]:before {
+  margin-right: 20px;
+}
+html #routes [data-route='/store'] .store-front {
+  display: flex;
+  justify-content: space-around;
+}
+html #routes [data-route='/store'] .store-front .store-item {
+  border: 1px solid #000;
+  padding: 20px;
+  display: inline-block;
+  margin: 10px;
 }
 html #routes [data-route='/'] .question {
   border: 1px solid #000;
@@ -13,7 +112,8 @@ html #routes [data-route='/'] .question {
 html #routes [data-route='/'] .guesses {
   height: 340px;
   border: 1px solid #008000;
-  martin-top: 50px;
+  margin-top: 50px;
+  overflow: auto;
 }
 html #routes [data-route='/'] .answer-form .guess-field {
   vertical-align: top;

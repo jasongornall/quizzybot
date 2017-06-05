@@ -22,8 +22,6 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
-
-
 exports.newQuestion = functions.database.ref('/active_question/public/user')
   .onWrite(event => {
 
@@ -31,21 +29,33 @@ exports.newQuestion = functions.database.ref('/active_question/public/user')
     if (!user_data || !user_data.owner) {
       return Promise.reject('already processing')
     }
+
+    // grab next question
     event.data.adminRef.root.child('question_bucket').once('child_added')
-    .then(function(snapshot) {
-      console.log('grabbed', snapshot.val())
+    var snapshot;
+    .then(function(ss) {
+      snapshot = ss
+      return functions.database.ref('active_question').once('value')
+    })
 
-      console.log('set active_question')
+    // grab active question
+    .then(function(active_question) {
 
-      // update date now
+      // update user points
+      return functions.database.ref('/users/' + user_data.owner + '/points').transaction(function(points) {
+        points = points || 0
+        ts = active_question.child('public/ts').val()
+        return points += 1 + Math.floor (Date.now() - ts) / 60 / 60 / 1000
+      })
+    })
+
+    // set new q
+    .then(function() {
       var new_data = snapshot.val()
       new_data.public.ts = Date.now()
-      event.data.adminRef.root.child('active_question').set(new_data)
-        .then(function() {
-          return snapshot.ref.remove()
-        })
+      return event.data.adminRef.root.child('active_question').set(new_data)
+      .then(function() {
+        return snapshot.ref.remove()
+      })
     });
-    // [END makeUppercaseBody]
-});
-// [END makeUppercase]
-// [END all]
+  });

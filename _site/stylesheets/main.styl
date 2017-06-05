@@ -1,12 +1,99 @@
 $active = gold
 $text_color = white
 
+
+
+.google
+  background: rgb(221, 75, 57);
+  color: white;
+  &:before
+    content:"\f1a0"
+    font-family: 'FontAwesome'
+
+.twitter
+  background: #55ACEE;
+  color: white;
+  &:before
+    content:"\f099"
+    font-family: 'FontAwesome'
+
+.facebook
+  background: #3B5998
+  color: white;
+  &:before
+    content:"\f09a"
+    font-family: 'FontAwesome'
 html
   background white
   font-family: Sans-Serif, Arial, Helvetica
+  a
+    margin 0 10px
+    color white
+  a.active
+    color yellow
+  a.visited
+    color inherit
+
+  &.logged-in
+    #navigation
+      .logged-in
+        display inline
+  &.logged-out
+    #navigation
+      .logged-out
+        display inline
+
+  #navigation
+    .logged-in, .logged-out
+      display none
+    background: green;
+    vertical-align: top;
+    padding: 10px
+    box-sizing border-box
+    color white
+    > div
+      display inline-block
+    > .right
+      float right
+    > .left
+      float left
+
+
   #routes
     max-width 800px
     margin 0 auto
+    .router-header
+      margin 20px 0
+      font-size 25px
+      color green
+    [data-route = "/login"]
+      .logged-out
+        text-align center
+        .description
+          opacity .5
+          color black
+          text-align left
+        .socials
+          display: flex;
+          justify-content: space-between;
+          margin-top 20px
+          [data-login]
+            padding 20px
+            display inline-block
+            cursor pointer
+            &:hover
+              opacity .8
+            &:before
+              margin-right 20px
+    [data-route='/store']
+      .store-front
+        display: flex;
+        justify-content: space-around;
+        .store-item
+          border 1px solid black
+          padding 20px
+          display inline-block
+          margin 10px
     [data-route='/']
       .question
         border: 1px solid black;
@@ -14,7 +101,8 @@ html
       .guesses
         height 340px
         border 1px solid green
-        martin-top 50px
+        margin-top: 50px;
+        overflow: auto;
       .answer-form
         .guess-field
           vertical-align top

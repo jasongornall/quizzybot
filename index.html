@@ -16,6 +16,7 @@
     <link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
     <link rel="manifest" href="favicon/manifest.json">
+    <link type="text/css" rel="stylesheet" href="stylesheets/font-awesome.css" />
     <meta name="msapplication-TileColor" content="#ffffff">
     <meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
@@ -76,9 +77,18 @@
   </head>
 
   <body>
+    <div id = "navigation">
+      <div class = "header"> QuizzyBot </div>
+      <a href = "/login" class = "auth right logged-out"> Click to Login </a>
+      <a href = "/login" class = "auth right logged-in"> My Profile </a>
+      <a href = "/"> Home Page </a>
+      <a href = "/store"> Store </a>
+    </div>
     <div id="body">
       <div id = "routes">
         <div data-route = "/"></div>
+        <div data-route = "/login"></div>
+        <div data-route = "/store"></div>
       </div>
     </div>
   </body>

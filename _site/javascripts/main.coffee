@@ -1,4 +1,3 @@
-
 timeouts = []
 intervals = []
 handleLink = ->
@@ -21,14 +20,76 @@ calculatePonts = (ts) ->
   base = 1
   base += Math.floor (Date.now() - ts) / 1000 / 60 / 60
 
+handleAuth = (next)->
+  firebase.auth().onAuthStateChanged (user) ->
+    if firebase.auth().currentUser
+      $('html').addClass 'logged-in'
+      next()
+    else
+      firebase.auth().signInAnonymously()
+      $('html').addClass 'logged-out'
+      next()
+
 handleRoute = (route, $el) ->
-  console.log route, '123'
+  # kill all listeners
+  firebase.database().ref().off()
+
   switch route
+
+    when '/login'
+      user = firebase.auth().currentUser
+      if user?.isAnonymous is false
+        firebase.database().ref("uid/#{user.uid}").on 'value', (data)->
+          $el.html teacup.render ->
+            div '.profile', ->
+              div '.router-header', -> 'My Profile'
+              img src: user.photoURL
+              span -> 'Display Name '
+              input '.name', value: user.displayName
+            div '.quizzypoints', -> "#{data.child('points').val() or 0}"
+            div '.purchased-items', -> 'TBD'
+      else
+        $el.html teacup.render ->
+          div '.router-header', -> 'Login to save your points!'
+          div '.logged-out', ->
+            div '.description', -> '''
+              This is just to connect the account I won't take any of your creds
+              I didn't want to bother with forgot password flow etc.. so just
+              riding the back of one of the many social networks that are
+              already out there
+            '''
+            div '.socials', ->
+              div '.facebook', 'data-login':'facebook', ->
+                'Login with Facebook'
+              div '.google', 'data-login': 'google', ->
+                'Login with Google'
+              div '.twitter', 'data-login': 'twitter', ->
+                'Login with Twitter'
+        $el.find('.socials [data-login]').off('click').on 'click', (e) ->
+          auth = $(e.currentTarget).data 'login'
+          console.log auth, '123'
+          switch auth
+            when 'google'
+              provider = new firebase.auth.GoogleAuthProvider();
+              firebase.auth().signInWithRedirect(provider)
+
+    when '/store'
+      firebase.database().ref("store").on 'value', (data) ->
+        $el.html teacup.render ->
+          div '.router-header', -> 'Quizzybot store!'
+          div '.description', -> 'Spend your knowledge to try to stump the net!'
+          div '.store-front', ->
+            for item in data.val()
+              div '.store-item', 'data-type': item.type, ->
+                div '.name', -> item.type
+                div '.description', -> item.description
+                div '.cost', -> "#{item.cost} QuizzyPoints"
 
     when '/'
 
       # initial render
       $el.html teacup.render ->
+        div '.router-header', -> 'Quizzybot game!'
         div '.question'
         div '.guesses'
 
@@ -38,7 +99,7 @@ handleRoute = (route, $el) ->
 
       # render question
       firebase.database().ref("active_question/public").on 'value', (data) ->
-        console.log data.val()
+        console.log data, 'panda'
         $el.find('.question').html teacup.render ->
           div -> '''
             Welcome to the Quiz Game!
@@ -59,11 +120,9 @@ handleRoute = (route, $el) ->
       firebase.database().ref("guesses").limitToFirst(100).on 'child_added', (data) ->
         $guesses.append teacup.render ->
           correct = data.child('correct').val()
-
           div '.guess', ->
             span '.name', -> data.child('answer').val()
-            span '.guess', -> correct
-
+            span '.guess', -> "#{correct}"
 
       # form submit
       $form = $('.answer-form')
@@ -110,7 +169,8 @@ route_url = (path) ->
 
 handleLink()
 $(window).load ->
-  route_url()
+  handleAuth ->
+    route_url()
 
 
 
