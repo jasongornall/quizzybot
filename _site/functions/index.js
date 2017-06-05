@@ -31,19 +31,21 @@ exports.newQuestion = functions.database.ref('/active_question/public/user')
     }
 
     // grab next question
-    event.data.adminRef.root.child('question_bucket').once('child_added')
     var snapshot;
+    event.data.adminRef.root.child('question_bucket').once('child_added')
     .then(function(ss) {
       snapshot = ss
-      return functions.database.ref('active_question').once('value')
+      return event.data.adminRef.database.ref('active_question').once('value')
     })
 
     // grab active question
     .then(function(active_question) {
 
       // update user points
-      return functions.database.ref('/users/' + user_data.owner + '/points').transaction(function(points) {
+      return event.data.ref.database.ref('/users/' + user_data.owner + '/points').transaction(function(points) {
         points = points || 0
+        console.log(active_question.val())
+
         ts = active_question.child('public/ts').val()
         return points += 1 + Math.floor (Date.now() - ts) / 60 / 60 / 1000
       })
@@ -54,8 +56,10 @@ exports.newQuestion = functions.database.ref('/active_question/public/user')
       var new_data = snapshot.val()
       new_data.public.ts = Date.now()
       return event.data.adminRef.root.child('active_question').set(new_data)
-      .then(function() {
-        return snapshot.ref.remove()
-      })
-    });
+    })
+
+    // remove original Q
+    .then(function() {
+      return snapshot.ref.remove()
+    })
   });
