@@ -1,6 +1,15 @@
 timeouts = []
 intervals = []
+
+showError = (err = 'Error Occued') ->
+  $('#popup').html teacup.render ->
+    div '.modal', ->
+      div '.modal-content', ->
+        div '.header', -> 'Error Occured'
+        div -> err
 handleLink = ->
+  $('#popup').on 'click', ->
+    $('#popup').empty()
   $('a').off('click').on 'click', (e) ->
     $el = $ e.currentTarget
     href = $el.attr 'href'
@@ -9,7 +18,19 @@ handleLink = ->
     path = url 'path', href
     route_url(path or '/')
     return false
-
+handleNotifications = ->
+  messaging = firebase.messaging()
+  messaging.requestPermission()
+  .then( ->
+    messaging.getToken()
+    .then (currentToken) ->
+      console.log currentToken, '34'
+      messaging.onTokenRefresh (currentToken) ->
+        console.log currentToken, '23'
+  )
+  .catch( (err) ->
+    console.log('Unable to get permission to notify.', err);
+  )
 getProfileData = ->
   user = firebase.auth().currentUser
   image = user.photoURL or "/images/profile.jpg"
@@ -20,7 +41,6 @@ getProfileData = ->
     image
     uid
   }
-
 cleanup = ->
   while timeouts.length
     clearTimeout timeouts.pop()
@@ -116,16 +136,20 @@ handleRoute = (route, $el) ->
             when 'signup'
               $el = $ e.currentTarget
               password = $el.siblings('.password').val()
+              password_two = $el.siblings('.password-again').val()
+              if password isnt password_two
+                showError 'Password do not match!'
+
               email = $el.siblings('.email').val()
               firebase.auth().createUserWithEmailAndPassword(email, password).catch (error) ->
-                console.log error, '123'
+                showError error.message if error
 
             when 'login'
               $el = $ e.currentTarget
               password = $el.siblings('.password').val()
               email = $el.siblings('.email').val()
               firebase.auth().signInWithEmailAndPassword(email, password).catch (error) ->
-                console.log error, '333'
+                showError error.message if error
 
     when '/store'
       firebase.database().ref("store").on 'value', (data) ->
@@ -239,6 +263,7 @@ route_url = (path) ->
 handleLink()
 $(window).load ->
   handleAuth ->
+    handleNotifications()
     route_url()
 
 
