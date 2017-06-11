@@ -10,6 +10,17 @@ handleLink = ->
     route_url(path or '/')
     return false
 
+getProfileData = ->
+  user = firebase.auth().currentUser
+  image = user.photoURL or "/images/profile.jpg"
+  name = user.displayName or "Quizzer-#{Math.floor Math.random() * 1000}"
+  uid = firebase.auth().currentUser.uid
+  return {
+    name
+    image
+    uid
+  }
+
 cleanup = ->
   while timeouts.length
     clearTimeout timeouts.pop()
@@ -18,16 +29,28 @@ cleanup = ->
 
 calculatePonts = (ts) ->
   base = 1
-  base += Math.floor (Date.now() - ts) / 1000 / 60 / 60
+  base += Math.floor (Date.now() - ts) / 1000
 
-handleAuth = (next)->
+handleAuth = (next) ->
+  new_user = false
   firebase.auth().onAuthStateChanged (user) ->
-    if firebase.auth().currentUser
-      $('html').addClass 'logged-in'
-      next()
+    if user
+      if user.isAnonymous
+        $('html').addClass 'logged-out'
+        if new_user
+          user.updateProfile({
+            displayName: "Quizzer-#{Math.floor Math.random() * 1000}"
+            photoURL: "/images/profile.jpg"
+          }).then next
+        else
+          next()
+      else
+        $('html').addClass 'logged-in'
+        next()
     else
+      new_user = true
       firebase.auth().signInAnonymously()
-      $('html').addClass 'logged-out'
+
       next()
 
 handleRoute = (route, $el) ->
@@ -39,7 +62,7 @@ handleRoute = (route, $el) ->
     when '/login'
       user = firebase.auth().currentUser
       if user?.isAnonymous is false
-        firebase.database().ref("uid/#{user.uid}").on 'value', (data)->
+        firebase.database().ref("users/#{user.uid}").on 'value', (data)->
           $el.html teacup.render ->
             div '.profile', ->
               div '.router-header', -> 'My Profile'
@@ -65,13 +88,44 @@ handleRoute = (route, $el) ->
                 'Login with Google'
               div '.twitter', 'data-login': 'twitter', ->
                 'Login with Twitter'
-        $el.find('.socials [data-login]').off('click').on 'click', (e) ->
+            div '.logins', ->
+              div '.basic', ->
+                div '.router-header', -> 'Login'
+                div -> 'email'
+                input '.email', type: 'text', placeholder: 'email'
+                div -> 'password'
+                input '.password', type: 'password', placeholder: 'password'
+                div '.login', 'data-login': 'login',  -> "Login with your account"
+              div '.basic', ->
+                div '.router-header', -> 'Signup'
+                div -> 'email'
+                input '.email', type: 'text', placeholder: 'email'
+                div -> 'password'
+                input '.password', type: 'password', placeholder: 'password'
+                div -> 'password (again)'
+                input '.password-again', type: 'password', placeholder: 'password (again):'
+                div '.login', 'data-login': 'signup',  -> "Signup with your email"
+        $el.find('[data-login]').off('click').on 'click', (e) ->
           auth = $(e.currentTarget).data 'login'
-          console.log auth, '123'
           switch auth
+
             when 'google'
               provider = new firebase.auth.GoogleAuthProvider();
               firebase.auth().signInWithRedirect(provider)
+
+            when 'signup'
+              $el = $ e.currentTarget
+              password = $el.siblings('.password').val()
+              email = $el.siblings('.email').val()
+              firebase.auth().createUserWithEmailAndPassword(email, password).catch (error) ->
+                console.log error, '123'
+
+            when 'login'
+              $el = $ e.currentTarget
+              password = $el.siblings('.password').val()
+              email = $el.siblings('.email').val()
+              firebase.auth().signInWithEmailAndPassword(email, password).catch (error) ->
+                console.log error, '333'
 
     when '/store'
       firebase.database().ref("store").on 'value', (data) ->
@@ -99,7 +153,6 @@ handleRoute = (route, $el) ->
 
       # render question
       firebase.database().ref("active_question/public").on 'value', (data) ->
-        console.log data, 'panda'
         $el.find('.question').html teacup.render ->
           div -> '''
             Welcome to the Quiz Game!
@@ -118,11 +171,26 @@ handleRoute = (route, $el) ->
       # render answer
       $guesses = $el.find('> .guesses')
       firebase.database().ref("guesses").limitToFirst(100).on 'child_added', (data) ->
+        correct = "#{data.child('correct').val()}"
         $guesses.append teacup.render ->
-          correct = data.child('correct').val()
           div '.guess', ->
-            span '.name', -> data.child('answer').val()
-            span '.guess', -> "#{correct}"
+            div '.profile', ->
+              img src: data.child('owner/image').val()
+
+            div '.attempt', 'data-correct': correct, ->
+              span '.username', -> data.child('owner/name').val()
+              span '.name', -> data.child('answer').val()
+            hr()
+
+        out = $guesses[0]
+
+        # stay scrolled to bottom
+        isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 70
+        if isScrolledToBottom
+          out.scrollTop = out.scrollHeight - out.clientHeight;
+
+        # slcie as needed
+        $guesses.find('.guess').slice(0, 0 - 100).remove()
 
       # form submit
       $form = $('.answer-form')
@@ -135,7 +203,7 @@ handleRoute = (route, $el) ->
           (next) ->
             firebase.database().ref("active_question/public/user").set {
               'answer': answer
-              'owner': 'wakka'
+              'owner': firebase.auth().currentUser.uid
             }, (err) ->
               next null, not err?
 
@@ -143,6 +211,7 @@ handleRoute = (route, $el) ->
             firebase.database().ref("guesses").push {
               'answer': answer
               'correct': correct
+              'owner': getProfileData()
             }, (err) ->
               next err
         ], (err) ->

@@ -42,7 +42,7 @@ exports.newQuestion = functions.database.ref('/active_question/public/user')
     .then(function(active_question) {
 
       // update user points
-      return event.data.ref.database.ref('/users/' + user_data.owner + '/points').transaction(function(points) {
+      return event.data.adminRef.database.ref('/users/' + user_data.owner + '/points').transaction(function(points) {
         points = points || 0
         console.log(active_question.val())
 

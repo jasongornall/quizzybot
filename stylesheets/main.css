@@ -79,6 +79,36 @@ html #routes [data-route = "/login"] .logged-out .description {
   color: #000;
   text-align: left;
 }
+html #routes [data-route = "/login"] .logged-out .logins > div {
+  text-align: left;
+  border: 1px solid #008000;
+  width: 300px;
+  margin: 10px;
+  padding: 10px;
+  display: inline-block;
+  vertical-align: top;
+}
+html #routes [data-route = "/login"] .logged-out .logins > div > input {
+  padding: 10px;
+}
+html #routes [data-route = "/login"] .logged-out .logins > div > div {
+  padding: 10px 0;
+}
+html #routes [data-route = "/login"] .logged-out .logins > div > .router-header {
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+html #routes [data-route = "/login"] .logged-out .logins > div .login {
+  background: #008000;
+  color: #fff;
+  padding: 10px;
+  margin-top: 10px;
+  display: inline-block;
+  cursor: pointer;
+}
+html #routes [data-route = "/login"] .logged-out .logins > div .login:hover {
+  opacity: 0.8;
+}
 html #routes [data-route = "/login"] .logged-out .socials {
   display: flex;
   justify-content: space-between;
@@ -110,10 +140,41 @@ html #routes [data-route='/'] .question {
   padding: 10px;
 }
 html #routes [data-route='/'] .guesses {
-  height: 340px;
+  height: 300px;
   border: 1px solid #008000;
   margin-top: 50px;
   overflow: auto;
+}
+html #routes [data-route='/'] .guesses > .guess {
+  margin: 0;
+  padding: 5px;
+}
+html #routes [data-route='/'] .guesses > .guess .profile {
+  display: inline-block;
+}
+html #routes [data-route='/'] .guesses > .guess .profile > img {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  margin-right: 16px;
+  vertical-align: top;
+}
+html #routes [data-route='/'] .guesses > .guess .attempt {
+  display: inline;
+  text-align: center;
+}
+html #routes [data-route='/'] .guesses > .guess .attempt > .username {
+  opacity: 0.5;
+}
+html #routes [data-route='/'] .guesses > .guess .attempt .name {
+  margin-left: 10px;
+  color: #f00;
+}
+html #routes [data-route='/'] .guesses > .guess .attempt[data-correct="true"] .name {
+  color: #008000;
+}
+html #routes [data-route='/'] .guesses > .guess hr {
+  display: none;
 }
 html #routes [data-route='/'] .answer-form .guess-field {
   vertical-align: top;

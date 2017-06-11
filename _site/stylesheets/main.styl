@@ -73,6 +73,31 @@ html
           opacity .5
           color black
           text-align left
+        .logins
+          > div
+            text-align: left;
+            border: 1px solid green;
+            width: 300px;
+            margin: 10px;
+            padding: 10px;
+            display: inline-block;
+            vertical-align top
+            > input
+              padding 10px
+            > div
+              padding: 10px 0;
+            > .router-header
+              margin 0 0 10px 0
+              padding 0
+            .login
+              background green
+              color white
+              padding 10px
+              margin-top 10px
+              display: inline-block;
+              cursor pointer
+              &:hover
+                opacity .8
         .socials
           display: flex;
           justify-content: space-between;
@@ -99,10 +124,34 @@ html
         border: 1px solid black;
         padding: 10px;
       .guesses
-        height 340px
+        height 300px
         border 1px solid green
         margin-top: 50px;
         overflow: auto;
+        > .guess
+          margin 0
+          padding 5px
+          .profile
+            display inline-block
+            > img
+              width: 32px;
+              height: 32px;
+              border-radius: 16px;
+              margin-right 16px
+              vertical-align top
+          .attempt
+            display inline
+            text-align center
+            > .username
+              opacity .5
+            .name
+              margin-left 10px
+              color red
+            &[data-correct="true"]  .name
+              color green
+          hr
+            display none
+
       .answer-form
         .guess-field
           vertical-align top

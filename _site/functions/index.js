@@ -42,11 +42,11 @@ exports.newQuestion = functions.database.ref('/active_question/public/user')
     .then(function(active_question) {
 
       // update user points
-      return event.data.ref.database.ref('/users/' + user_data.owner + '/points').transaction(function(points) {
+      return event.data.adminRef.database.ref('/users/' + user_data.owner + '/points').transaction(function(points) {
         points = points || 0
         console.log(active_question.val())
 
-        ts = active_question.child('public/ts').val()
+        var ts = active_question.child('public/ts').val()
         return points += 1 + Math.floor (Date.now() - ts) / 60 / 60 / 1000
       })
     })
