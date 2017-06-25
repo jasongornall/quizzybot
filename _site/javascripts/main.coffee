@@ -19,27 +19,6 @@ handleLink = ->
     route_url(path or '/')
     return false
 
-handleNotifications = ->
-
-  messaging = firebase.messaging()
-
-  messaging.onMessage (payload) ->
-    console.log 'onmsg', payload
-
-  messaging.requestPermission()
-  .then( ->
-    messaging.getToken()
-    .then (currentToken) ->
-      user = firebase.auth().currentUser
-      firebase.database().ref("users/#{user.uid}/notif").set currentToken
-      messaging.onTokenRefresh (currentToken) ->
-        user = firebase.auth().currentUser
-        firebase.database().ref("users/#{user.uid}/notif").set currentToken
-  )
-  .catch( (err) ->
-    console.log('Unable to get permission to notify.', err);
-  )
-
 getProfileData = ->
   user = firebase.auth().currentUser
   image = user.photoURL or "/images/profile.jpg"
@@ -272,7 +251,6 @@ route_url = (path) ->
 handleLink()
 $(window).load ->
   handleAuth ->
-    handleNotifications()
     route_url()
 
 
