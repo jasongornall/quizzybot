@@ -67,12 +67,20 @@ html
       font-size 25px
       color green
     [data-route = "/login"]
+      img.profile
+        width: 32px;
+        height: 32px;
+        border-radius: 16px;
+        margin-right 16px
+        vertical-align top
+        object-fit cover
       .logged-out
         text-align center
         .description
           opacity .5
           color black
           text-align left
+          padding-top: 20px;
         .logins
           > div
             text-align: left;
@@ -98,9 +106,9 @@ html
               cursor pointer
               &:hover
                 opacity .8
-        .socials
+        .socials, .social-connect
           display: flex;
-          justify-content: space-between;
+          justify-content: space-around;
           margin-top 20px
           [data-login]
             padding 20px
@@ -139,6 +147,7 @@ html
               border-radius: 16px;
               margin-right 16px
               vertical-align top
+              object-fit cover
           .attempt
             display inline
             text-align center

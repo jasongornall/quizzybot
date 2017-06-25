@@ -1,6 +1,6 @@
 timeouts = []
 intervals = []
-
+MY_user_data = null
 showError = (err = 'Error Occued') ->
   $('#popup').html teacup.render ->
     div '.modal', ->
@@ -19,16 +19,22 @@ handleLink = ->
     route_url(path or '/')
     return false
 
-getProfileData = ->
+getProfileData = (next) ->
   user = firebase.auth().currentUser
-  image = user.photoURL or "/images/profile.jpg"
-  name = user.displayName or "Quizzer-#{Math.floor Math.random() * 1000}"
-  uid = firebase.auth().currentUser.uid
-  return {
-    name
-    image
-    uid
-  }
+  getData = (next) ->
+    console.log MY_user_data
+    return next MY_user_data if MY_user_data
+    firebase.database().ref("users/#{user.uid}").once 'value', (data) =>
+      MY_user_data = data
+      console.log MY_user_data, 'wtf'
+      next MY_user_data
+  getData (data) ->
+    next {
+      name: data.child('displayName').val()
+      image: data.child('photoURL').val()
+      uid: user.uid
+
+    }
 cleanup = ->
   while timeouts.length
     clearTimeout timeouts.pop()
@@ -46,10 +52,10 @@ handleAuth = (next) ->
       if user.isAnonymous
         $('html').addClass 'logged-out'
         if new_user
-          user.updateProfile({
+          firebase.database().ref("users/#{user.uid}").set {
             displayName: "Quizzer-#{Math.floor Math.random() * 1000}"
             photoURL: "/images/profile.jpg"
-          }).then next
+          }, next
         else
           next()
       else
@@ -64,80 +70,122 @@ handleAuth = (next) ->
 handleRoute = (route, $el) ->
   # kill all listeners
   firebase.database().ref().off()
-
+  user = firebase.auth().currentUser
   switch route
 
     when '/login'
-      user = firebase.auth().currentUser
       if user?.isAnonymous is false
-        firebase.database().ref("users/#{user.uid}").on 'value', (data)->
+        firebase.database().ref("users/#{user.uid}").once 'value', (profile_doc)->
           $el.html teacup.render ->
-            div '.profile', ->
+            div '.header.profile', ->
               div '.router-header', -> 'My Profile'
-              img src: user.photoURL
+              img '.profile', src: profile_doc.child('photoURL').val()
+              input '.profile', type: 'file', accept: "image/*"
               span -> 'Display Name '
-              input '.name', value: user.displayName
-            div '.quizzypoints', -> "#{data.child('points').val() or 0}"
+              input '.name', value: profile_doc.child('displayName').val()
+
+              div '.save', -> 'Save Changes'
+            div '.quizzypoints', -> "#{profile_doc.child('points').val() or 0}"
             div '.purchased-items', -> 'TBD'
+
+          $el.find('input.name').change ->
+            $el.find('.header').addClass 'pending-save'
+          $el.find('input.profile').change ->
+            if (this.files && this.files[0])
+              reader = new FileReader();
+              my_file = this.files[0]
+              reader.onload = (e) ->
+                $image_profile = $el.find('img.profile')
+                $image_profile.load ->
+                  $image_profile.data 'file', my_file
+                  $el.find('.header').addClass 'pending-save'
+                $image_profile.attr 'src', e.target.result
+              reader.readAsDataURL(my_file);
+
+          $el.find('.save').off('click').on 'click', (e) ->
+            console.log 'inside'
+            async.parallel [
+              (next) =>
+                profile_doc.child('displayName').ref.set $el.find('input.name').val(), next
+
+              (next) =>
+                file = $el.find('img.profile').data 'file'
+                return done_profile unless file
+                storageRef = firebase.storage().ref("users/#{user.uid}/profile")
+                upload_task = storageRef.put(file)
+
+                upload_task.on 'state_changed', ((snapshot) ->
+                ), ((error) ->
+
+                  # Handle unsuccessful uploads
+                  return next 'error occured'
+                ), ->
+
+                  # Handle successful uploads on complete
+                  # For instance, get the download URL: https://firebasestorage.googleapis.com/...
+                  new_url = "https://images.infernalscoop.com/users/#{user.uid}/profile?_=#{Date.now()}"
+                  profile_doc.child('photoURL').ref.set new_url, next
+            ], (err) ->
+              console.log err, '123'
+
       else
-        $el.html teacup.render ->
-          div '.router-header', -> 'Login to save your points!'
-          div '.logged-out', ->
-            div '.description', -> '''
-              This is just to connect the account I won't take any of your creds
-              I didn't want to bother with forgot password flow etc.. so just
-              riding the back of one of the many social networks that are
-              already out there
-            '''
-            div '.socials', ->
-              div '.facebook', 'data-login':'facebook', ->
-                'Login with Facebook'
-              div '.google', 'data-login': 'google', ->
-                'Login with Google'
-              div '.twitter', 'data-login': 'twitter', ->
-                'Login with Twitter'
-            div '.logins', ->
-              div '.basic', ->
-                div '.router-header', -> 'Login'
-                div -> 'email'
-                input '.email', type: 'text', placeholder: 'email'
-                div -> 'password'
-                input '.password', type: 'password', placeholder: 'password'
-                div '.login', 'data-login': 'login',  -> "Login with your account"
-              div '.basic', ->
-                div '.router-header', -> 'Signup'
-                div -> 'email'
-                input '.email', type: 'text', placeholder: 'email'
-                div -> 'password'
-                input '.password', type: 'password', placeholder: 'password'
-                div -> 'password (again)'
-                input '.password-again', type: 'password', placeholder: 'password (again):'
-                div '.login', 'data-login': 'signup',  -> "Signup with your email"
-        $el.find('[data-login]').off('click').on 'click', (e) ->
-          auth = $(e.currentTarget).data 'login'
-          switch auth
+        firebase.database().ref("users/#{user.uid}").once 'value', (data) ->
+          $el.html teacup.render ->
+            div '.error', -> ''
+            div '.router-header', -> 'Login to save your points!'
+            div '.logged-out', ->
 
-            when 'google'
-              provider = new firebase.auth.GoogleAuthProvider();
-              firebase.auth().signInWithRedirect(provider)
+              div '.description', -> '''
+                This is just to connect the account I won't take any of your creds
+                I didn't want to bother with forgot password flow etc.. so just
+                riding the back of one of the many social networks that are
+                already out there
+              '''
+              div '.socials', ->
+                div '.facebook', 'data-login':'facebook', ->
+                  'Login'
+                div '.google', 'data-login': 'google', ->
+                  'Login'
+                div '.twitter', 'data-login': 'twitter', ->
+                  'Login'
+              if data.child('points').val()
+                div '.description', -> '''
+                  It looks like you have already gotten some quizzypoints Good Job!
+                  Click below to convert into a permanent account!
+                '''
+                div '.social-connect', ->
+                  div '.facebook', 'data-login':'facebook', ->
+                    'Connect Points'
+                  div '.google', 'data-login': 'google', ->
+                    'Connect Points'
+                  div '.twitter', 'data-login': 'twitter', ->
+                    'Connect Points'
 
-            when 'signup'
-              $el = $ e.currentTarget
-              password = $el.siblings('.password').val()
-              password_two = $el.siblings('.password-again').val()
-              if password isnt password_two
-                showError 'Password do not match!'
 
-              email = $el.siblings('.email').val()
-              firebase.auth().createUserWithEmailAndPassword(email, password).catch (error) ->
-                showError error.message if error
+          $el.find('.social-connect [data-login]').off('click').on 'click', (e) ->
+            console.log e, '123'
+            auth = $(e.currentTarget).data 'login'
+            switch auth
 
-            when 'login'
-              $el = $ e.currentTarget
-              password = $el.siblings('.password').val()
-              email = $el.siblings('.email').val()
-              firebase.auth().signInWithEmailAndPassword(email, password).catch (error) ->
-                showError error.message if error
+              when 'google'
+                firebase.auth().currentUser.linkWithPopup(new firebase.auth.GoogleAuthProvider()).then((result) ->
+                  route_url '/login'
+                ).catch (error) ->
+                  $el.find('> .error').append teacup.render ->
+                    div -> "#{error.message} #{error.code}"
+
+
+          $el.find('.socials [data-login]').off('click').on 'click', (e) ->
+            auth = $(e.currentTarget).data 'login'
+            switch auth
+
+              when 'google'
+                provider = new firebase.auth.GoogleAuthProvider();
+                firebase.auth().signInWithPopup(provider).then((result) ->
+                  route_url '/login'
+                ).catch (error) ->
+                  $el.find('> .error').append teacup.render ->
+                    div -> "#{error.message} #{error.code}"
 
     when '/store'
       firebase.database().ref("store").on 'value', (data) ->
@@ -182,7 +230,7 @@ handleRoute = (route, $el) ->
 
       # render answer
       $guesses = $el.find('> .guesses')
-      firebase.database().ref("guesses").limitToFirst(100).on 'child_added', (data) ->
+      firebase.database().ref("guesses").limitToLast(100).on 'child_added', (data) ->
         correct = "#{data.child('correct').val()}"
         $guesses.append teacup.render ->
           div '.guess', ->
@@ -220,12 +268,13 @@ handleRoute = (route, $el) ->
               next null, not err?
 
           (correct, next) ->
-            firebase.database().ref("guesses").push {
-              'answer': answer
-              'correct': correct
-              'owner': getProfileData()
-            }, (err) ->
-              next err
+            getProfileData (owner) ->
+              firebase.database().ref("guesses").push {
+                'answer': answer
+                'correct': correct
+                'owner': owner
+              }, (err) ->
+                next err
         ], (err) ->
           console.log err if err
         return false
