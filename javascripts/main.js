@@ -44,11 +44,17 @@ handleLink = function() {
 handleNotifications = function() {
   var messaging;
   messaging = firebase.messaging();
+  messaging.onMessage(function(payload) {
+    return console.log('onmsg', payload);
+  });
   return messaging.requestPermission().then(function() {
     return messaging.getToken().then(function(currentToken) {
-      console.log(currentToken, '34');
+      var user;
+      user = firebase.auth().currentUser;
+      firebase.database().ref("users/" + user.uid + "/notif").set(currentToken);
       return messaging.onTokenRefresh(function(currentToken) {
-        return console.log(currentToken, '23');
+        user = firebase.auth().currentUser;
+        return firebase.database().ref("users/" + user.uid + "/notif").set(currentToken);
       });
     });
   })["catch"](function(err) {

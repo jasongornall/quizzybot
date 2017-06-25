@@ -22,6 +22,20 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
+const cors = require('cors')({origin: true});
+
+exports.helloWorld = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    res.status(200).send('hello world');
+  });
+});
+
+exports.helloWorld_2 = functions.https.onRequest((req, res) => {
+  cors(req, res, () => {
+    res.status(200).send('hello world');
+  });
+});
+
 exports.newQuestion = functions.database.ref('/active_question/public/user')
   .onWrite(event => {
 

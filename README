@@ -1,1 +1,12 @@
 bundle exec jekyll serve
+
+
+curl -H 'Authorization: key=AAAA58hT4vQ:APA91bHGHzHx16gDPAlRNYMsYj2L9m_L-AAjbmgKP8tS554SDI1RiC0udOw_jxyqTttyy-XF72gLtFQ5eF7s_gLsA_sad6azQP-vAm23SAqlxURGFkCIfy1hs-ztVfm6axp1CbtfFQyj' -H "Content-type: application/json" -d '{
+  "to": "f490pH-SmpA:APA91bGljSTYHBLpeqXOH1ERRT7vfJhRAvHAbYBq533Th1emIbLIYHG_eogXvzNsE2621lLgq6d1qUINM6nNaKaYbsRQLgg_nmpefIt4A_IpXkQykMTRvok2CKI8b9Pg1QIRFB-kunb2",
+  "priority": "high",
+  "notification": {
+    "body": "FOO BAR BLA BLA"
+  }
+}' 'https://fcm.googleapis.com/fcm/send'
+
+
