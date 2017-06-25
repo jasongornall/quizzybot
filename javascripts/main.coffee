@@ -279,6 +279,7 @@ handleRoute = (route, $el) ->
             firebase.database().ref("active_question/public/user").set {
               'answer': answer
               'owner': firebase.auth().currentUser.uid
+              'ts':  firebase.database.ServerValue.TIMESTAMP
             }, (err) ->
               next null, not err?
 
@@ -288,6 +289,7 @@ handleRoute = (route, $el) ->
                 'answer': answer
                 'correct': correct
                 'owner': owner
+                'ts':  firebase.database.ServerValue.TIMESTAMP
               }, (err) ->
                 next err
         ], (err) ->

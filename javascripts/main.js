@@ -425,7 +425,8 @@ handleRoute = function(route, $el) {
           function(next) {
             return firebase.database().ref("active_question/public/user").set({
               'answer': answer,
-              'owner': firebase.auth().currentUser.uid
+              'owner': firebase.auth().currentUser.uid,
+              'ts': firebase.database.ServerValue.TIMESTAMP
             }, function(err) {
               return next(null, err == null);
             });
@@ -434,7 +435,8 @@ handleRoute = function(route, $el) {
               return firebase.database().ref("guesses").push({
                 'answer': answer,
                 'correct': correct,
-                'owner': owner
+                'owner': owner,
+                'ts': firebase.database.ServerValue.TIMESTAMP
               }, function(err) {
                 return next(err);
               });
