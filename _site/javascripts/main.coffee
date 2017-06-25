@@ -77,14 +77,19 @@ handleRoute = (route, $el) ->
       if user?.isAnonymous is false
         firebase.database().ref("users/#{user.uid}").once 'value', (profile_doc)->
           $el.html teacup.render ->
-            div '.header.profile', ->
+            div '.profile', ->
               div '.router-header', -> 'My Profile'
-              img '.profile', src: profile_doc.child('photoURL').val()
-              input '.profile', type: 'file', accept: "image/*"
-              span -> 'Display Name '
-              input '.name', value: profile_doc.child('displayName').val()
-
+              div '.modify', ->
+                img '.profile', src: profile_doc.child('photoURL').val()
+                input '.profile', type: 'file', accept: "image/*"
+              div '.modify', ->
+                span -> 'Display Name '
+                input '.name', value: profile_doc.child('displayName').val()
               div '.save', -> 'Save Changes'
+              div '.status', ->
+                div '.saved', -> 'Saved!'
+                div '.saving', -> 'Saving...'
+                div '.error', -> 'Error Occured.. photo too large?'
             div '.quizzypoints', -> "#{profile_doc.child('points').val() or 0}"
             div '.purchased-items', -> 'TBD'
 
@@ -102,15 +107,16 @@ handleRoute = (route, $el) ->
                 $image_profile.attr 'src', e.target.result
               reader.readAsDataURL(my_file);
 
-          $el.find('.save').off('click').on 'click', (e) ->
-            console.log 'inside'
+          $save = $el.find('.save')
+          $save.off('click').on 'click', (e) ->
+            $el.find('.status').attr 'data-state', 'saving'
             async.parallel [
               (next) =>
                 profile_doc.child('displayName').ref.set $el.find('input.name').val(), next
 
               (next) =>
                 file = $el.find('img.profile').data 'file'
-                return done_profile unless file
+                return next() unless file
                 storageRef = firebase.storage().ref("users/#{user.uid}/profile")
                 upload_task = storageRef.put(file)
 
@@ -126,7 +132,10 @@ handleRoute = (route, $el) ->
                   new_url = "https://images.infernalscoop.com/users/#{user.uid}/profile?_=#{Date.now()}"
                   profile_doc.child('photoURL').ref.set new_url, next
             ], (err) ->
-              console.log err, '123'
+              if err
+                $el.find('.status').attr 'data-state', 'error'
+              else
+                $el.find('.status').attr 'data-state', 'saved'
 
       else
         firebase.database().ref("users/#{user.uid}").once 'value', (data) ->
@@ -230,6 +239,11 @@ handleRoute = (route, $el) ->
 
       # render answer
       $guesses = $el.find('> .guesses')
+      force = true
+      setTimeout (->
+        force = false
+      ), 3000
+
       firebase.database().ref("guesses").limitToLast(100).on 'child_added', (data) ->
         correct = "#{data.child('correct').val()}"
         $guesses.append teacup.render ->
@@ -246,8 +260,9 @@ handleRoute = (route, $el) ->
 
         # stay scrolled to bottom
         isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 70
-        if isScrolledToBottom
-          out.scrollTop = out.scrollHeight - out.clientHeight;
+        if force or isScrolledToBottom
+          console.log $guesses.prop('scrollHeight')
+          $guesses.scrollTop($guesses.prop('scrollHeight'));
 
         # slcie as needed
         $guesses.find('.guess').slice(0, 0 - 100).remove()
@@ -290,8 +305,9 @@ route_url = (path) ->
 
   $("[data-route]").hide()
   $el = $("[data-route='#{new_path}']")
-  handleRoute new_path, $el
-  $el.fadeIn()
+
+  $el.fadeIn 0, ->
+    handleRoute new_path, $el
 
   $link = $("#navigation a[href='#{new_path}']")
   $link.addClass 'active'

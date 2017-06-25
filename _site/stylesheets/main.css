@@ -71,6 +71,23 @@ html #routes .router-header {
   font-size: 25px;
   color: #008000;
 }
+html #routes [data-route = "/login"] .status {
+  display: inline-block;
+  color: #008000;
+  margin-left: 20px;
+}
+html #routes [data-route = "/login"] .status > div {
+  display: none;
+}
+html #routes [data-route = "/login"] .status[data-state="saving"] .saving {
+  display: block;
+}
+html #routes [data-route = "/login"] .status[data-state="error"] .error {
+  display: block;
+}
+html #routes [data-route = "/login"] .status[data-state="saved"] .saved {
+  display: block;
+}
 html #routes [data-route = "/login"] img.profile {
   width: 32px;
   height: 32px;
@@ -78,6 +95,18 @@ html #routes [data-route = "/login"] img.profile {
   margin-right: 16px;
   vertical-align: top;
   object-fit: cover;
+}
+html #routes [data-route = "/login"] .modify {
+  padding-bottom: 10px;
+}
+html #routes [data-route = "/login"] .save {
+  background: #008000;
+  color: #fff;
+  padding: 10px;
+  margin-bottom: 30px;
+  display: inline-block;
+  margin-top: 20px;
+  cursor: pointer;
 }
 html #routes [data-route = "/login"] .logged-out {
   text-align: center;

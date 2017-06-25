@@ -114,33 +114,49 @@ handleAuth = function(next) {
 };
 
 handleRoute = function(route, $el) {
-  var $form, $guesses, user;
+  var $form, $guesses, force, user;
   firebase.database().ref().off();
   user = firebase.auth().currentUser;
   switch (route) {
     case '/login':
       if ((user != null ? user.isAnonymous : void 0) === false) {
         return firebase.database().ref("users/" + user.uid).once('value', function(profile_doc) {
+          var $save;
           $el.html(teacup.render(function() {
-            div('.header.profile', function() {
+            div('.profile', function() {
               div('.router-header', function() {
                 return 'My Profile';
               });
-              img('.profile', {
-                src: profile_doc.child('photoURL').val()
+              div('.modify', function() {
+                img('.profile', {
+                  src: profile_doc.child('photoURL').val()
+                });
+                return input('.profile', {
+                  type: 'file',
+                  accept: "image/*"
+                });
               });
-              input('.profile', {
-                type: 'file',
-                accept: "image/*"
+              div('.modify', function() {
+                span(function() {
+                  return 'Display Name ';
+                });
+                return input('.name', {
+                  value: profile_doc.child('displayName').val()
+                });
               });
-              span(function() {
-                return 'Display Name ';
-              });
-              input('.name', {
-                value: profile_doc.child('displayName').val()
-              });
-              return div('.save', function() {
+              div('.save', function() {
                 return 'Save Changes';
+              });
+              return div('.status', function() {
+                div('.saved', function() {
+                  return 'Saved!';
+                });
+                div('.saving', function() {
+                  return 'Saving...';
+                });
+                return div('.error', function() {
+                  return 'Error Occured.. photo too large?';
+                });
               });
             });
             div('.quizzypoints', function() {
@@ -170,8 +186,9 @@ handleRoute = function(route, $el) {
               return reader.readAsDataURL(my_file);
             }
           });
-          return $el.find('.save').off('click').on('click', function(e) {
-            console.log('inside');
+          $save = $el.find('.save');
+          return $save.off('click').on('click', function(e) {
+            $el.find('.status').attr('data-state', 'saving');
             return async.parallel([
               (function(_this) {
                 return function(next) {
@@ -182,7 +199,7 @@ handleRoute = function(route, $el) {
                   var file, storageRef, upload_task;
                   file = $el.find('img.profile').data('file');
                   if (!file) {
-                    return done_profile;
+                    return next();
                   }
                   storageRef = firebase.storage().ref("users/" + user.uid + "/profile");
                   upload_task = storageRef.put(file);
@@ -196,7 +213,11 @@ handleRoute = function(route, $el) {
                 };
               })(this)
             ], function(err) {
-              return console.log(err, '123');
+              if (err) {
+                return $el.find('.status').attr('data-state', 'error');
+              } else {
+                return $el.find('.status').attr('data-state', 'saved');
+              }
             });
           });
         });
@@ -359,6 +380,10 @@ handleRoute = function(route, $el) {
         }));
       });
       $guesses = $el.find('> .guesses');
+      force = true;
+      setTimeout((function() {
+        return force = false;
+      }), 3000);
       firebase.database().ref("guesses").limitToLast(100).on('child_added', function(data) {
         var correct, isScrolledToBottom, out;
         correct = "" + (data.child('correct').val());
@@ -384,8 +409,9 @@ handleRoute = function(route, $el) {
         }));
         out = $guesses[0];
         isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 70;
-        if (isScrolledToBottom) {
-          out.scrollTop = out.scrollHeight - out.clientHeight;
+        if (force || isScrolledToBottom) {
+          console.log($guesses.prop('scrollHeight'));
+          $guesses.scrollTop($guesses.prop('scrollHeight'));
         }
         return $guesses.find('.guess').slice(0, 0 - 100).remove();
       });
@@ -433,8 +459,9 @@ route_url = function(path) {
   new_path = "/" + (data[1] || '');
   $("[data-route]").hide();
   $el = $("[data-route='" + new_path + "']");
-  handleRoute(new_path, $el);
-  $el.fadeIn();
+  $el.fadeIn(0, function() {
+    return handleRoute(new_path, $el);
+  });
   $link = $("#navigation a[href='" + new_path + "']");
   $link.addClass('active');
   return $link.siblings().removeClass('active');

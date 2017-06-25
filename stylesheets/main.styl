@@ -67,6 +67,18 @@ html
       font-size 25px
       color green
     [data-route = "/login"]
+      .status
+        display: inline-block;
+        color: green;
+        margin-left: 20px;
+        > div
+          display none
+        &[data-state="saving"] .saving
+          display block
+        &[data-state="error"] .error
+          display block
+        &[data-state="saved"] .saved
+          display block
       img.profile
         width: 32px;
         height: 32px;
@@ -74,6 +86,16 @@ html
         margin-right 16px
         vertical-align top
         object-fit cover
+      .modify
+        padding-bottom 10px
+      .save
+        background green
+        color white
+        padding 10px
+        margin-bottom 30px
+        display: inline-block;
+        margin-top: 20px
+        cursor pointer
       .logged-out
         text-align center
         .description
