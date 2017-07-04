@@ -7,6 +7,14 @@ showError = (err = 'Error Occued') ->
       div '.modal-content', ->
         div '.header', -> 'Error Occured'
         div -> err
+
+
+renderTimeouts = {}
+setTimeoutStr = (str, length, func) ->
+  clearTimeout renderTimeouts[str]
+  renderTimeouts[str] = setTimeout func, length * 1000
+
+
 handleLink = ->
   $('#popup').on 'click', ->
     $('#popup').empty()
@@ -22,7 +30,6 @@ handleLink = ->
 getProfileData = (next) ->
   user = firebase.auth().currentUser
   getData = (next) ->
-    console.log MY_user_data
     return next MY_user_data if MY_user_data
     firebase.database().ref("users/#{user.uid}").once 'value', (data) =>
       MY_user_data = data
@@ -71,7 +78,26 @@ handleRoute = (route, $el) ->
   # kill all listeners
   firebase.database().ref().off()
   user = firebase.auth().currentUser
+  console.log route, 'sssssss'
   switch route
+
+    when '/old'
+      console.log 'a'
+      firebase.database().ref("old_questions").on 'value', (data) ->
+        $el.html teacup.render ->
+          for key, {question} of data.val()
+            console.log key, question, 'wakka'
+            div '.question', 'data-key': key, ->
+              h1 -> 'Question'
+              div '.text', -> "#{question.public.question}"
+
+              h3 -> 'Answer'
+              div '.points', -> "#{question.public.user.answer}"
+
+              h3 -> 'pointed gained'
+              div '.points', -> "#{question.public.end_ts - question.public.ts}"
+
+
 
     when '/login'
       if user?.isAnonymous is false
@@ -136,6 +162,7 @@ handleRoute = (route, $el) ->
                 $el.find('.status').attr 'data-state', 'error'
               else
                 $el.find('.status').attr 'data-state', 'saved'
+                MY_user_data = null
 
       else
         firebase.database().ref("users/#{user.uid}").once 'value', (data) ->
@@ -202,11 +229,59 @@ handleRoute = (route, $el) ->
           div '.router-header', -> 'Quizzybot store!'
           div '.description', -> 'Spend your knowledge to try to stump the net!'
           div '.store-front', ->
-            for item in data.val()
-              div '.store-item', 'data-type': item.type, ->
-                div '.name', -> item.type
-                div '.description', -> item.description
-                div '.cost', -> "#{item.cost} QuizzyPoints"
+            div '.store-item', 'data-type': 'riddle', ->
+              div '.header', ->
+                div '.name', -> 'Riddle'
+                div '.description', -> 'Add your own question into the quizzy game!'
+                div '.cost', -> "100 QuizzyPoints"
+              div '.form', ->
+                div -> 'Riddle Title'
+                textarea '.riddle'
+
+                div -> 'hint 1 (after 24 hours) (optional)'
+                textarea '.hint.1'
+
+                div -> 'hint 2 (after 48 hours) (optional)'
+                textarea '.hint.2'
+
+                div -> 'hint 3 (after 72 hours) (optional)'
+                textarea '.hint.3'
+
+                div -> 'answer'
+                textarea '.answer'
+
+                div '.submit', -> 'submit'
+
+        $el.find('.store-item .header').on 'click', (e) ->
+          $el =  $ e.currentTarget
+          $el.siblings('.form').slideToggle()
+        $el.find('.store-item[data-type=riddle] .submit').on 'click', (e) ->
+          $form = $(e.currentTarget).closest('.form')
+
+
+          key = firebase.database().ref().child('question_bucket').push().key;
+          uid = firebase.auth().currentUser.uid
+          firebase.database().ref("users/#{uid}").once 'value', (profile_doc) ->
+            current_points = profile_doc.child('points').val() or 0
+            updates = {}
+
+
+            updates["users/#{uid}/points"] = current_points - 100
+            updates["question_bucket/#{key}"] = {
+              private:
+                answer: $form.find('.answer').val()
+                hint_1: $form.find('.hint.1').val()
+                hint_2: $form.find('.hint.2').val()
+                hint_3: $form.find('.hint.3').val()
+              public:
+                riddle: $form.find('.riddle').val()
+                owner: firebase.auth().currentUser.uid
+            }
+            console.log updates, '213'
+            firebase.database().ref().update(updates).then((result) ->
+              console.log result, '123'
+            ).catch (error) ->
+              console.log error
 
     when '/'
 
@@ -222,19 +297,21 @@ handleRoute = (route, $el) ->
 
       # render question
       firebase.database().ref("active_question/public").on 'value', (data) ->
+        return if $el.find('.question .wrapper').data('ts') is data.child('ts').val()
         $el.find('.question').html teacup.render ->
-          div -> '''
-            Welcome to the Quiz Game!
-            Just answer the Current Riddle in a comment on this post and win...
-            quizbot points!
-            Yeah! You can spend them over in the shop section
-          '''
+          div '.wrapper', 'data-ts': data.child('ts').val(), ->
+            div -> '''
+              Welcome to the Quiz Game!
+              Just answer the Current Riddle in a comment on this post and win...
+              quizbot points!
+              Yeah! You can spend them over in the shop section
+            '''
 
-          h1 -> 'Question'
-          div '.text', -> "#{data.child('question').val()}"
+            h1 -> 'Question'
+            div '.text', -> "#{data.child('question').val()}"
 
-          h3 -> 'Points'
-          div '.points', -> "#{calculatePonts data.child('ts').val()}"
+            h3 -> 'Points'
+            div '.points', -> "#{calculatePonts data.child('ts').val()}"
 
 
       # render answer
@@ -297,6 +374,7 @@ handleRoute = (route, $el) ->
         return false
 
 route_url = (path) ->
+
   $('#body').attr('class','')
   path = path || url 'path'
 
@@ -308,7 +386,9 @@ route_url = (path) ->
   $("[data-route]").hide()
   $el = $("[data-route='#{new_path}']")
 
-  $el.fadeIn 0, ->
+  console.log 'aaa', path
+  $el.fadeIn 200, ->
+    console.log 'r'
     handleRoute new_path, $el
 
   $link = $("#navigation a[href='#{new_path}']")
